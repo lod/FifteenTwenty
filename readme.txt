@@ -14,6 +14,8 @@ Tweaked post 1031 (Tiled Gallery) to changed random gallery order to ID
 Base TwentyFifteen theme was installed on server and a test golden image created using `wget --mirror`
 Also pulled in a delibrate 404 page using curl, index.html?p=666
 FifteenTwenty theme was then tested against the golden mirror.
+curl "http://fifteentwenty.tulloh.id.au/index.html?p=666" -o "index.html?p=666"
+find . -maxdepth 1 -type f -print0 | xargs -0 -I'{}' sh -c "tidy --new-blocklevel-tags header,section,aside,article,footer,time,figure,main,figcaption,nav --show-warnings no -indent '{}' | sed 's/twentyfifteen/fifteentwenty/g' > ../control/'{}'"
 
 
 == Description ==

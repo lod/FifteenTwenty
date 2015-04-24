@@ -29,7 +29,7 @@
 
 <body <?php body_class(); ?>>
 <div id="page" class="hfeed site">
-	<a class="skip-link screen-reader-text" href="#content"><?php _e( 'Skip to content', 'twentyfifteen' ); ?></a>
+	<a class="skip-link screen-reader-text" href="#content"><?php _e( 'Skip to content', 'fifteentwenty' ); ?></a>
 
 	<div id="sidebar" class="sidebar">
 		<header id="masthead" class="site-header" role="banner">
@@ -46,7 +46,7 @@
 						<p class="site-description"><?php echo $description; ?></p>
 					<?php endif;
 				?>
-				<button class="secondary-toggle"><?php _e( 'Menu and widgets', 'twentyfifteen' ); ?></button>
+				<button class="secondary-toggle"><?php _e( 'Menu and widgets', 'fifteentwenty' ); ?></button>
 			</div><!-- .site-branding -->
 		</header><!-- .site-header -->
 
@@ -92,18 +92,18 @@
 				// Previous/next page navigation.
 				if (is_single()) {
 					the_post_navigation( array(
-						'next_text' => '<span class="meta-nav" aria-hidden="true">' . __( 'Next', 'twentyfifteen' ) . '</span> ' .
-							'<span class="screen-reader-text">' . __( 'Next post:', 'twentyfifteen' ) . '</span> ' .
+						'next_text' => '<span class="meta-nav" aria-hidden="true">' . __( 'Next', 'fifteentwenty' ) . '</span> ' .
+							'<span class="screen-reader-text">' . __( 'Next post:', 'fifteentwenty' ) . '</span> ' .
 							'<span class="post-title">%title</span>',
-						'prev_text' => '<span class="meta-nav" aria-hidden="true">' . __( 'Previous', 'twentyfifteen' ) . '</span> ' .
-							'<span class="screen-reader-text">' . __( 'Previous post:', 'twentyfifteen' ) . '</span> ' .
+						'prev_text' => '<span class="meta-nav" aria-hidden="true">' . __( 'Previous', 'fifteentwenty' ) . '</span> ' .
+							'<span class="screen-reader-text">' . __( 'Previous post:', 'fifteentwenty' ) . '</span> ' .
 							'<span class="post-title">%title</span>',
 					) );
 				} else {
 					the_posts_pagination( array(
-						'prev_text'          => __( 'Previous page', 'twentyfifteen' ),
-						'next_text'          => __( 'Next page', 'twentyfifteen' ),
-						'before_page_number' => '<span class="meta-nav screen-reader-text">' . __( 'Page', 'twentyfifteen' ) . ' </span>',
+						'prev_text'          => __( 'Previous page', 'fifteentwenty' ),
+						'next_text'          => __( 'Next page', 'fifteentwenty' ),
+						'before_page_number' => '<span class="meta-nav screen-reader-text">' . __( 'Page', 'fifteentwenty' ) . ' </span>',
 					) );
 				}
 
@@ -122,9 +122,9 @@
 		<div class="site-info">
 			<?php
 				// Fires before the Twenty Fifteen footer text for footer customization.
-				do_action( 'twentyfifteen_credits' );
+				do_action( 'fifteentwenty_credits' );
 			?>
-			<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'twentyfifteen' ) ); ?>"><?php printf( __( 'Proudly powered by %s', 'twentyfifteen' ), 'WordPress' ); ?></a>
+			<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'fifteentwenty' ) ); ?>"><?php printf( __( 'Proudly powered by %s', 'fifteentwenty' ), 'WordPress' ); ?></a>
 		</div><!-- .site-info -->
 	</footer><!-- .site-footer -->
 
