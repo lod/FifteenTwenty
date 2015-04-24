@@ -81,6 +81,7 @@
 					if(is_search()) $format = 'search';
 					if(is_single() && is_attachment()) {
 						// Template based on the first portion of mime, image/jpeg -> content-image.php
+						// Can overlap with get_post_format() formats
 						$format = explode("/", get_post_mime_type(), 2)[0];
 						// Don't want prepend_attachment on single pages, this mimics template-loader.php
 						remove_filter('the_content', 'prepend_attachment');
@@ -97,7 +98,7 @@
 
 				// Previous/next page navigation.
 				if (is_single()) {
-					if($format == "image") {
+					if(is_attachment() && $format == "image") {
 						the_post_navigation( array(
 							'prev_text' => _x( '<span class="meta-nav">Published in</span><span class="post-title">%title</span>', 'Parent post link', 'fifteentwenty' ),
 						) );
