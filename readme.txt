@@ -7,6 +7,15 @@ Stable tag: 4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
+== NOTES ==
+Server was patched to fix https://core.trac.wordpress.org/ticket/23408
+Theme test data from http://wptest.io was installed
+Tweaked post 1031 (Tiled Gallery) to changed random gallery order to ID
+Base TwentyFifteen theme was installed on server and a test golden image created using `wget --mirror`
+Also pulled in a delibrate 404 page using curl, index.html?p=666
+FifteenTwenty theme was then tested against the golden mirror.
+
+
 == Description ==
 Our 2015 default theme is clean, blog-focused, and designed for clarity. Twenty Fifteen's simple, straightforward typography is readable on a wide variety of screen sizes, and suitable for multiple languages. We designed it using a mobile-first approach, meaning your content takes center-stage, regardless of whether your visitors arrive by smartphone, tablet, laptop, or desktop computer.
 
