@@ -58,84 +58,59 @@
 	<div id="primary" class="content-area">
 		<main id="main" class="site-main" role="main">
 
-		<?php if ( is_404() ) {
-			get_template_part( 'partial', '404' );
-		} else {
-			// Default index portion
-?>
-		<?php if ( have_posts() ) : ?>
-
-			<?php if ( is_home() && ! is_front_page() ) : ?>
-				<header>
-					<h1 class="page-title screen-reader-text"><?php single_post_title(); ?></h1>
-				</header>
-			<?php elseif ( is_archive() ): ?>
-				<header class="page-header">
-					<h1 class="page-title"><?php printf( __( 'Search Results for: %s', 'twentyfifteen' ), get_search_query() ); ?></h1>
-				</header><!-- .page-header -->
-			<?php elseif ( is_archive() ): ?>
-				<header class="page-header">
-					<?php
-						the_archive_title( '<h1 class="page-title">', '</h1>' );
-						the_archive_description( '<div class="taxonomy-description">', '</div>' );
-					?>
-				</header><!-- .page-header -->
-			<?php endif; ?>
-
 			<?php
-			// Start the loop.
-			while ( have_posts() ) : the_post();
+			// Default index portion
+			if ( have_posts() ) {
+				if ( is_home() && ! is_front_page() )
+					get_template_part( 'heading', 'static_homepage' );
+				elseif ( is_search() )
+					get_template_part( 'heading', 'search' );
+				elseif ( is_archive() )
+					get_template_part( 'heading', 'archive' );
 
-				if (is_page()) {
-					// Include the page content template.
-					get_template_part( 'content', 'page' );
-				} elseif (is_search()) {
-					/*
-					 * Run the loop for the search to output the results.
-					 * If you want to overload this in a child theme then include a file
-					 * called content-search.php and that will be used instead.
-					 */
-					get_template_part( 'content', 'search' );
-				} else {
+				// Start the loop.
+				while ( have_posts() ) {
+					the_post();
 					/*
 					 * Include the Post-Format-specific template for the content.
 					 * If you want to override this in a child theme, then include a file
 					 * called content-___.php (where ___ is the Post Format name) and that will be used instead.
 					 */
+					$format = get_post_format();
+					if(is_page())   $format = 'page';
+					if(is_search()) $format = 'search';
+
 					get_template_part( 'content', get_post_format() );
+
+					// Display comments partial if appropriate
+					if ( ( is_single() || is_page() ) && ( comments_open() || get_comments_number() ) ) :
+						comments_template();
+					endif;
+
+				} // have_posts()
+
+				// Previous/next page navigation.
+				if (is_single()) {
+					the_post_navigation( array(
+						'next_text' => '<span class="meta-nav" aria-hidden="true">' . __( 'Next', 'twentyfifteen' ) . '</span> ' .
+							'<span class="screen-reader-text">' . __( 'Next post:', 'twentyfifteen' ) . '</span> ' .
+							'<span class="post-title">%title</span>',
+						'prev_text' => '<span class="meta-nav" aria-hidden="true">' . __( 'Previous', 'twentyfifteen' ) . '</span> ' .
+							'<span class="screen-reader-text">' . __( 'Previous post:', 'twentyfifteen' ) . '</span> ' .
+							'<span class="post-title">%title</span>',
+					) );
+				} else {
+					the_posts_pagination( array(
+						'prev_text'          => __( 'Previous page', 'twentyfifteen' ),
+						'next_text'          => __( 'Next page', 'twentyfifteen' ),
+						'before_page_number' => '<span class="meta-nav screen-reader-text">' . __( 'Page', 'twentyfifteen' ) . ' </span>',
+					) );
 				}
 
-				if ( ( is_single() || is_page() ) && ( comments_open() || get_comments_number() ) ) :
-					comments_template();
-				endif;
-
-			// End the loop.
-			endwhile;
-
-			// Previous/next page navigation.
-			if (is_single()) {
-				the_post_navigation( array(
-					'next_text' => '<span class="meta-nav" aria-hidden="true">' . __( 'Next', 'twentyfifteen' ) . '</span> ' .
-						'<span class="screen-reader-text">' . __( 'Next post:', 'twentyfifteen' ) . '</span> ' .
-						'<span class="post-title">%title</span>',
-					'prev_text' => '<span class="meta-nav" aria-hidden="true">' . __( 'Previous', 'twentyfifteen' ) . '</span> ' .
-						'<span class="screen-reader-text">' . __( 'Previous post:', 'twentyfifteen' ) . '</span> ' .
-						'<span class="post-title">%title</span>',
-				) );
-			} else {
-				the_posts_pagination( array(
-					'prev_text'          => __( 'Previous page', 'twentyfifteen' ),
-					'next_text'          => __( 'Next page', 'twentyfifteen' ),
-					'before_page_number' => '<span class="meta-nav screen-reader-text">' . __( 'Page', 'twentyfifteen' ) . ' </span>',
-				) );
-			}
-
-		// If no content, include the "No posts found" template.
-		else :
-			get_template_part( 'content', 'none' );
-
-		endif;
-		} // is_404()
+		} else {
+			// If no content, include the "No posts found" template.
+			get_template_part( 'content', is_404() ? '404' : 'none' );
+		} // have_posts()
 		?>
 
 		</main><!-- .site-main -->
@@ -146,11 +121,7 @@
 	<footer id="colophon" class="site-footer" role="contentinfo">
 		<div class="site-info">
 			<?php
-				/**
-				 * Fires before the Twenty Fifteen footer text for footer customization.
-				 *
-				 * @since Twenty Fifteen 1.0
-				 */
+				// Fires before the Twenty Fifteen footer text for footer customization.
 				do_action( 'twentyfifteen_credits' );
 			?>
 			<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'twentyfifteen' ) ); ?>"><?php printf( __( 'Proudly powered by %s', 'twentyfifteen' ), 'WordPress' ); ?></a>

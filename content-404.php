@@ -2,6 +2,7 @@
 /**
  * The partial for displaying 404 pages (not found)
  */
+?>
 <section class="error-404 not-found">
 	<header class="page-header">
 		<h1 class="page-title"><?php _e( 'Oops! That page can&rsquo;t be found.', 'twentyfifteen' ); ?></h1>
