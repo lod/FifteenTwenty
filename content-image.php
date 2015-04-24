@@ -6,14 +6,21 @@
 
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
-	<nav id="image-navigation" class="navigation image-navigation">
-		<div class="nav-links">
-			<div class="nav-previous"><?php previous_image_link( false, __( 'Previous Image', 'fifteentwenty' ) ); ?></div><div class="nav-next"><?php next_image_link( false, __( 'Next Image', 'fifteentwenty' ) ); ?></div>
-		</div><!-- .nav-links -->
-	</nav><!-- .image-navigation -->
+	<?php if(is_single()) : ?>
+		<nav id="image-navigation" class="navigation image-navigation">
+			<div class="nav-links">
+				<div class="nav-previous"><?php previous_image_link( false, __( 'Previous Image', 'fifteentwenty' ) ); ?></div><div class="nav-next"><?php next_image_link( false, __( 'Next Image', 'fifteentwenty' ) ); ?></div>
+			</div><!-- .nav-links -->
+		</nav><!-- .image-navigation -->
+	<?php endif; ?>
 
 	<header class="entry-header">
-		<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
+		<?php 
+			if ( is_single() )
+				the_title( '<h1 class="entry-title">', '</h1>' );
+			else
+				the_title( sprintf( '<h2 class="entry-title"><a href="%s" rel="bookmark">', esc_url( get_permalink() ) ), '</a></h2>' );
+		?>
 	</header><!-- .entry-header -->
 
 	<div class="entry-content">
@@ -59,13 +66,3 @@
 	</footer><!-- .entry-footer -->
 
 </article><!-- #post-## -->
-
-<?php
-	/* TODO: This varies from the default 
-	// Previous/next post navigation.
-	the_post_navigation( array(
-		'prev_text' => _x( '<span class="meta-nav">Published in</span><span class="post-title">%title</span>', 'Parent post link', 'fifteentwenty' ),
-	) );
-	 */
-
-?>

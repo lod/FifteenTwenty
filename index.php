@@ -79,8 +79,14 @@
 					$format = get_post_format();
 					if(is_page())   $format = 'page';
 					if(is_search()) $format = 'search';
-
-					get_template_part( 'content', get_post_format() );
+					if(is_single() && is_attachment()) {
+						// Template based on the first portion of mime, image/jpeg -> content-image.php
+						$format = explode("/", get_post_mime_type(), 2)[0];
+						// Don't want prepend_attachment on single pages, this mimics template-loader.php
+						remove_filter('the_content', 'prepend_attachment');
+					}
+					
+					get_template_part( 'content', $format );
 
 					// Display comments partial if appropriate
 					if ( ( is_single() || is_page() ) && ( comments_open() || get_comments_number() ) ) :
@@ -91,14 +97,20 @@
 
 				// Previous/next page navigation.
 				if (is_single()) {
-					the_post_navigation( array(
-						'next_text' => '<span class="meta-nav" aria-hidden="true">' . __( 'Next', 'fifteentwenty' ) . '</span> ' .
-							'<span class="screen-reader-text">' . __( 'Next post:', 'fifteentwenty' ) . '</span> ' .
-							'<span class="post-title">%title</span>',
-						'prev_text' => '<span class="meta-nav" aria-hidden="true">' . __( 'Previous', 'fifteentwenty' ) . '</span> ' .
-							'<span class="screen-reader-text">' . __( 'Previous post:', 'fifteentwenty' ) . '</span> ' .
-							'<span class="post-title">%title</span>',
-					) );
+					if($format == "image") {
+						the_post_navigation( array(
+							'prev_text' => _x( '<span class="meta-nav">Published in</span><span class="post-title">%title</span>', 'Parent post link', 'fifteentwenty' ),
+						) );
+					} else {
+						the_post_navigation( array(
+							'next_text' => '<span class="meta-nav" aria-hidden="true">' . __( 'Next', 'fifteentwenty' ) . '</span> ' .
+								'<span class="screen-reader-text">' . __( 'Next post:', 'fifteentwenty' ) . '</span> ' .
+								'<span class="post-title">%title</span>',
+							'prev_text' => '<span class="meta-nav" aria-hidden="true">' . __( 'Previous', 'fifteentwenty' ) . '</span> ' .
+								'<span class="screen-reader-text">' . __( 'Previous post:', 'fifteentwenty' ) . '</span> ' .
+								'<span class="post-title">%title</span>',
+						) );
+					}
 				} else {
 					the_posts_pagination( array(
 						'prev_text'          => __( 'Previous page', 'fifteentwenty' ),
