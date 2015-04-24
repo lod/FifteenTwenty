@@ -2,7 +2,7 @@
 # This file is distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Twenty Fifteen 1.1\n"
+"Project-Id-Version: Fifteen Twenty 1.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/theme/fifteentwenty\n"
 "POT-Creation-Date: 2015-04-23 15:11:26+00:00\n"
 "MIME-Version: 1.0\n"
@@ -87,7 +87,7 @@ msgid ""
 "searching can help."
 msgstr ""
 
-#. #-#-#-#-#  fifteentwenty.pot (Twenty Fifteen 1.1)  #-#-#-#-#
+#. #-#-#-#-#  fifteentwenty.pot (Fifteen Twenty 1.0)  #-#-#-#-#
 #. Author URI of the plugin/theme
 #: footer.php:25
 msgid "https://wordpress.org/"
@@ -178,7 +178,7 @@ msgstr ""
 
 #: inc/back-compat.php:37 inc/back-compat.php:47 inc/back-compat.php:60
 msgid ""
-"Twenty Fifteen requires at least WordPress version 4.1. You are running "
+"Fifteen Twenty requires at least WordPress version 4.1. You are running "
 "version %s. Please upgrade and try again."
 msgstr ""
 
@@ -306,7 +306,7 @@ msgid "Previous post:"
 msgstr ""
 
 #. Theme Name of the plugin/theme
-msgid "Twenty Fifteen"
+msgid "Fifteen Twenty"
 msgstr ""
 
 #. Theme URI of the plugin/theme
@@ -315,12 +315,11 @@ msgstr ""
 
 #. Description of the plugin/theme
 msgid ""
-"Our 2015 default theme is clean, blog-focused, and designed for clarity. "
-"Twenty Fifteen's simple, straightforward typography is readable on a wide "
-"variety of screen sizes, and suitable for multiple languages. We designed it "
-"using a mobile-first approach, meaning your content takes center-stage, "
-"regardless of whether your visitors arrive by smartphone, tablet, laptop, or "
-"desktop computer."
+"A structurally inverted version of the 2015 default WordPress theme. "
+"This theme is stylistically an exact copy of Twenty Fifteen, the CSS "
+"layout and other styling elements are delibrately unchanged. "
+"The purpose of this theme is to demonstrate a technique to invert the "
+"way the PHP template files are handled so all layout is in one file."
 msgstr ""
 
 #. Author of the plugin/theme

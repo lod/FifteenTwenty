@@ -1,5 +1,5 @@
 /**
- * Twenty Fifteen keyboard support for image navigation.
+ * Fifteen Twenty keyboard support for image navigation.
  */
 
 ( function( $ ) {

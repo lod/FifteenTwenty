@@ -15,7 +15,8 @@ Base TwentyFifteen theme was installed on server and a test golden image created
 Also pulled in a delibrate 404 page using curl, index.html?p=666
 FifteenTwenty theme was then tested against the golden mirror.
 curl "http://fifteentwenty.tulloh.id.au/index.html?p=666" -o "index.html?p=666"
-find . -maxdepth 1 -type f -print0 | xargs -0 -I'{}' sh -c "tidy --new-blocklevel-tags header,section,aside,article,footer,time,figure,main,figcaption,nav --show-warnings no -indent '{}' | sed 's/twentyfifteen/fifteentwenty/g' > ../control/'{}'"
+
+find . -maxdepth 1 -type f -print0 | xargs -0 -I'{}' sh -c "tidy --new-blocklevel-tags header,section,aside,article,footer,time,figure,main,figcaption,nav,rss,channel,description,language,item,comments,pubdate,dc:creator,category,lastbuilddate,sy:updateperiod,sy:updatefrequency,atom:link,generator,guid,content:encoded,wfw:commentrss,slash:comments,guid,content:encoded,enclosure,rsd,service,enginename,enginelink,homepagelink,apis,api --show-warnings no -indent '{}' | sed 's/twentyfifteen/fifteentwenty/g;s/section/div/' > ../control/'{}'" ^| grep errors | grep -v " 0 errors"
 
 
 == Description ==

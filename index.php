@@ -134,7 +134,7 @@
 	<footer id="colophon" class="site-footer" role="contentinfo">
 		<div class="site-info">
 			<?php
-				// Fires before the Twenty Fifteen footer text for footer customization.
+				// Fires before the footer text for footer customization.
 				do_action( 'fifteentwenty_credits' );
 			?>
 			<a href="<?php echo esc_url( __( 'https://wordpress.org/', 'fifteentwenty' ) ); ?>"><?php printf( __( 'Proudly powered by %s', 'fifteentwenty' ), 'WordPress' ); ?></a>

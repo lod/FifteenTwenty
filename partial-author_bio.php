@@ -1,10 +1,6 @@
 <?php
 /**
  * The template for displaying Author bios
- *
- * @package WordPress
- * @subpackage Twenty_Fifteen
- * @since Twenty Fifteen 1.0
  */
 ?>
 
@@ -14,8 +10,6 @@
 		<?php
 		/**
 		 * Filter the author bio avatar size.
-		 *
-		 * @since Twenty Fifteen 1.0
 		 *
 		 * @param int $size The avatar height and width size in pixels.
 		 */
