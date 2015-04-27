@@ -1,5 +1,5 @@
 === Twenty Fifteen ===
-Contributors: the WordPress team
+Contributors: the WordPress team & David Tulloh
 Tags: black, blue, gray, pink, purple, white, yellow, dark, light, two-columns, left-sidebar, fixed-layout, responsive-layout, accessibility-ready, custom-background, custom-colors, custom-header, custom-menu, editor-style, featured-images, microformats, post-formats, rtl-language-support, sticky-post, threaded-comments, translation-ready
 Requires at least: 4.1
 Tested up to: 4.1
@@ -7,28 +7,28 @@ Stable tag: 4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-== NOTES ==
-Server was patched to fix https://core.trac.wordpress.org/ticket/23408
-Theme test data from http://wptest.io was installed
-Tweaked post 1031 (Tiled Gallery) to changed random gallery order to ID
-Base TwentyFifteen theme was installed on server and a test golden image created using `wget --mirror`
-Also pulled in a delibrate 404 page using curl, index.html?p=666
-FifteenTwenty theme was then tested against the golden mirror.
-curl "http://fifteentwenty.tulloh.id.au/index.html?p=666" -o "index.html?p=666"
-
-find . -maxdepth 1 -type f -print0 | xargs -0 -I'{}' sh -c "tidy --new-blocklevel-tags header,section,aside,article,footer,time,figure,main,figcaption,nav,rss,channel,description,language,item,comments,pubdate,dc:creator,category,lastbuilddate,sy:updateperiod,sy:updatefrequency,atom:link,generator,guid,content:encoded,wfw:commentrss,slash:comments,guid,content:encoded,enclosure,rsd,service,enginename,enginelink,homepagelink,apis,api --show-warnings no -indent '{}' | sed 's/twentyfifteen/fifteentwenty/g;s/section/div/' > ../control/'{}'" ^| grep errors | grep -v " 0 errors"
-
-
 == Description ==
-Our 2015 default theme is clean, blog-focused, and designed for clarity. Twenty Fifteen's simple, straightforward typography is readable on a wide variety of screen sizes, and suitable for multiple languages. We designed it using a mobile-first approach, meaning your content takes center-stage, regardless of whether your visitors arrive by smartphone, tablet, laptop, or desktop computer.
+This is a technical demonstration of inverting the logic of the standard template strategy. The appearance, styling and generated html is the same as the WordPress default style Twenty Fifteen. This theme is designed as an example for theme authors. If you just want a theme to use, use Twenty Fifteen, it has considerably more support and testing.
 
-* Responsive Layout
-* Custom Colors
-* Custom Header
-* Social Links
-* Menu Description
-* Post Formats
-* The GPL v2.0 or later license. :) Use it to make something cool.
+WordPress themes consist of a collection of php template files. WordPress chooses a template based on the type of content being requested, this allows a different template to be used for search results or an audio attachment. The decision is made using the template hierarchy depicted below. WordPress proceeds from left to right until it finds a file which matches the desired pattern, on the far right index.php acts as a catch all for any file types not specially handled.
+
+The advantage of this structure is that it allows for a huge degree of flexibility in the styling. Any content can have a complete different set of styling provided to it and the hierarchy allows for very specific specialty pages to be created.
+
+The disadvantage is that every template requires a duplication of the site structure. Changes such as reordering the HTML structure require the reworking of every single template file, this was exactly the problem I faced when working on this blog's template Piano Black.
+
+In practice I feel the theme hierarchy structure is a poor design choice as you want to retain the same look a feel across the entire site. This means that the layout is consistent and the variations are typically isolated to the central content pane. Theme authors attempt to reduce the amount of duplication by using a header and footer file which is pulled into each template, this helps to reduce work for minor changes but doesn’t aid in more structural alterations.
+
+The alternative structure is to have a single template file which sets the structure of the website. This file then pulls in partial templates based on the content being requested. The partial templates provide a reduced level of flexibility to the full template model but are simpler as they do not need to include as much of the site’s structure. The Twenty Fifteen theme actually uses both full and partial templates, the partial templates are used for different categories of posts.
+
+I do not mean this as an attack or criticism of the WordPress team, the choice was a trade off and they chose the more flexible approach leading to a product far more successful than any I have ever produced. This choice was also made for the initial release in 2003, a different online environment with alternative aesthetic (MySpace) and less use of javascript. They have made a fantastic product and the flexibility built through it allows for novel uses, like mine.
+
+By removing all the custom template files WordPress will always use index.php as a template. As the template is a full php file it can examine the requested content type and pull in the required partial template. This technique uses the WordPress partial include function to retain the ability for sub-themes to customize specific partials.
+
+To demonstrate this technique I chose to rework the Twenty Fifteen theme as it is designed as a basis for theme authors to work from, which is also my goal. I took each of the template files and pushed the common elements up to index.php converting them into a partial. The includes designed to reduce duplication such as header.php, footer.php and sidebar.php were also pushed into index.php. I then set up a demo site using the wptest.io test data and used wget –mirror, HTML tidy, a tiny bit of sed and diff to beat the last bugs out and ensure that the final result was unchanged from the initial Twenty Fifteen model.
+
+* [Demo site](http://fifteentwenty.tulloh.id.au/)
+* [Source code](https://github.com/lod/FifteenTwenty)
+* [Release announcement](http://david.tulloh.id.au/fifteen-twenty/)
 
 == Installation ==
 
@@ -38,67 +38,43 @@ Our 2015 default theme is clean, blog-focused, and designed for clarity. Twenty 
 
 == Frequently Asked Questions ==
 
-= How do I change the color scheme? =
+= How do I do user theme things? =
 
-You can change the colors of your site easily using Twenty Fifteen.
+This theme is very very strongly based off WordPress's official Twenty Fifteen theme. If you want a theme to use on your blog, I strongly recommend you use Twenty Fifteen in preference to this theme.
 
-1. In your admin panel, go to Appearance -> Customize.
-4. Now you will see the Customizer and a tab called 'Colors'. Click this tab.
-5. You can now change your color scheme by selecting one of the predefined ones. Choose a color scheme you want from Base Color Scheme dropdown. You can preview the change in the Customizer.
-6. Should you wish to create your own color scheme or modify an existing one, you can by selecting the colors for each area listed.
-7. Once you are happy with your color changes you can click save and your changes will be reflected on your live site.
+That said, all the functionality of Twenty Fifteen should work and be present. Feel free to read the Twenty Fifteen documentation for assistance.
 
-= How do I add the Social Links to the sidebar? =
+= How did you perform testing? =
 
-Twenty Fifteen allows you display links to your social media profiles, like Twitter and Facebook, with icons.
+Significant effort was taken to ensure that this theme faithfully represented the Twenty Fifteen base. This ensured that the theme was a good basis for further work but more importantly highlighted bugs and regressions in the work.
 
-1. Create a new Custom Menu, and assign it to the Social Links Menu location.
-2. Add links to each of your social services using the Links panel.
-3. Icons for your social links will automatically appear if it's available.
+This documents the test process used:
 
-Available icons: (Linking to any of the following sites will automatically display its icon in your social menu).
+1. WordPress test instance was created on http://fifteentwenty.tulloh.id.au/.
 
-* Codepen
-* Digg
-* Dribbble
-* Dropbox
-* Facebook
-* Flickr
-* Foursquare
-* GitHub
-* Google+
-* Instagram
-* LinkedIn
-* Email (mailto: links)
-* Pinterest
-* Pocket
-* PollDaddy
-* Reddit
-* RSS Feed (URLs with /feed/)
-* Spotify
-* StumbleUpon
-* Tumblr
-* Twitch
-* Twitter
-* Vimeo
-* WordPress
-* YouTube
+2. Server was patched to fix https://core.trac.wordpress.org/ticket/23408
 
-Social networks that aren't currently supported will be indicated by a generic share icon.
+3. Theme test data from http://wptest.io was installed.
 
-= How do I add a description for my menu link in navigation? =
+4. Post 1031 (Tiled Gallery) to changed random gallery order to ID order.
 
-Twenty Fifteen sports a menu design that's easy to navigate -- especially when you add menu descriptions.
+5. TwentyFifteen (svn head, r32247, 2015-04-24) theme was installed on server.
 
-1. Visit the Menus page in your admin.
-2. Use the Screen Options tab to "Show advanced menu properties".
-3. Select "Description" there to start editing menu descriptions.
-4. Select the menu you want to add links and descriptions to.
-5. When in the Menu Structure section, you can click open the link and add a description.
-6. Once you save the menu with your link, the new description should show up.
+6. Golden webpage set created using `wget --mirror`
 
-= Quick Specs =
+7. 404 page added using curl on index.html?p=666
 
-1. The main content width is 660px.
-2. The sidebar width is 248px.
-3. Featured Images are 825px wide by 510px high.
+8. Golden set converted to control set as comparison basis. HTML tidy was run to hide trivial layout and whitespace issues, sed was also applied sparsely to updated strings which are expected to change.
+
+    find . -maxdepth 1 -type f -print0 | xargs -0 -I'{}' sh -c "tidy --new-blocklevel-tags header,section,aside,article,footer,time,figure,main,figcaption,nav,rss,channel,description,language,item,comments,pubdate,dc:creator,category,lastbuilddate,sy:updateperiod,sy:updatefrequency,atom:link,generator,guid,content:encoded,wfw:commentrss,slash:comments,guid,content:encoded,enclosure,rsd,service,enginename,enginelink,homepagelink,apis,api --show-warnings no -indent '{}' | sed 's/twentyfifteen/fifteentwenty/g;s/section/div/' > ../control/'{}'" ^| grep errors | grep -v " 0 errors"
+
+9. FifteenTwenty theme was installed on the server and enabled.
+
+10. Full webpage set was retrieved, including 404 page using wget and curl.
+
+11. Comparison set was created, similar to the process used in step 8.
+
+    find . -maxdepth 1 -type f -print0 | xargs -0 -I'{}' sh -c "tidy --new-blocklevel-tags header,section,aside,article,footer,time,figure,main,figcaption,nav,rss,channel,description,language,item,comments,pubdate,dc:creator,category,lastbuilddate,sy:updateperiod,sy:updatefrequency,atom:link,generator,guid,content:encoded,wfw:commentrss,slash:comments,guid,content:encoded,enclosure,rsd,service,enginename,enginelink,homepagelink,apis,api --show-warnings no -indent '{}'  > ../victim/'{}'" ^| grep errors | grep -v " 0 errors"
+
+12. Comparison performed using `diff -q -r victim/ control/`.
+Variations are inspected further by hand. There are some allowed changes such as the comments in style.css vary. A good comparison has non-functional changes to index.html?p=666 and style.css.
