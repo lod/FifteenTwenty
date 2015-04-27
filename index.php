@@ -35,100 +35,115 @@
 		<header id="masthead" class="site-header" role="banner">
 			<div class="site-branding">
 				<?php
+					$title_text = '<a href="'.esc_url(home_url('/')).'" rel="home">'.get_bloginfo('name', 'display').'</a>';
 					if ( is_front_page() && is_home() ) : ?>
-						<h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
+						<h1 class="site-title"><?php echo $title_text ?></h1>
 					<?php else : ?>
-						<p class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></p>
+						<p class="site-title"><?php echo $title_text ?></p>
 					<?php endif;
 
 					$description = get_bloginfo( 'description', 'display' );
 					if ( $description || is_customize_preview() ) : ?>
-						<p class="site-description"><?php echo $description; ?></p>
-					<?php endif;
-				?>
+						<p class="site-description"><?php echo $description ?></p>
+					<?php endif; ?>
 				<button class="secondary-toggle"><?php _e( 'Menu and widgets', 'fifteentwenty' ); ?></button>
 			</div><!-- .site-branding -->
 		</header><!-- .site-header -->
 
-		<?php get_sidebar(); ?>
+		<?php if ( has_nav_menu( 'primary' ) || has_nav_menu( 'social' ) || is_active_sidebar( 'sidebar-1' )  ) : ?>
+		<div id="secondary" class="secondary">
+
+			<?php if ( has_nav_menu( 'primary' ) ) : ?>
+				<nav id="site-navigation" class="main-navigation" role="navigation">
+					<?php
+						// Primary navigation menu.
+						wp_nav_menu( array(
+							'menu_class'     => 'nav-menu',
+							'theme_location' => 'primary',
+						) );
+					?>
+				</nav><!-- .main-navigation -->
+			<?php endif; ?>
+
+			<?php if ( has_nav_menu( 'social' ) ) : ?>
+				<nav id="social-navigation" class="social-navigation" role="navigation">
+					<?php
+						// Social links navigation menu.
+						wp_nav_menu( array(
+							'theme_location' => 'social',
+							'depth'          => 1,
+							'link_before'    => '<span class="screen-reader-text">',
+							'link_after'     => '</span>',
+						) );
+					?>
+				</nav><!-- .social-navigation -->
+			<?php endif; ?>
+
+			<?php if ( is_active_sidebar( 'sidebar-1' ) ) : ?>
+				<div id="widget-area" class="widget-area" role="complementary">
+					<?php dynamic_sidebar( 'sidebar-1' ); ?>
+				</div><!-- .widget-area -->
+			<?php endif; ?>
+
+		</div><!-- .secondary -->
+		<?php endif; ?>
+
 	</div><!-- .sidebar -->
 
 	<div id="content" class="site-content">
+		<div id="primary" class="content-area">
+			<main id="main" class="site-main" role="main">
 
-	<div id="primary" class="content-area">
-		<main id="main" class="site-main" role="main">
+				<?php
+				// Default index portion
+				if ( have_posts() ) {
+					if ( is_home() && ! is_front_page() )
+						get_template_part( 'heading', 'static_homepage' );
+					elseif ( is_search() )
+						get_template_part( 'heading', 'search' );
+					elseif ( is_archive() )
+						get_template_part( 'heading', 'archive' );
 
-			<?php
-			// Default index portion
-			if ( have_posts() ) {
-				if ( is_home() && ! is_front_page() )
-					get_template_part( 'heading', 'static_homepage' );
-				elseif ( is_search() )
-					get_template_part( 'heading', 'search' );
-				elseif ( is_archive() )
-					get_template_part( 'heading', 'archive' );
+					// Start the loop.
+					while ( have_posts() ) {
+						the_post();
 
-				// Start the loop.
-				while ( have_posts() ) {
-					the_post();
-					/*
-					 * Include the Post-Format-specific template for the content.
-					 * If you want to override this in a child theme, then include a file
-					 * called content-___.php (where ___ is the Post Format name) and that will be used instead.
-					 */
-					$format = get_post_format();
-					if(is_page())   $format = 'page';
-					if(is_search()) $format = 'search';
-					if(is_single() && is_attachment()) {
-						// Template based on the first portion of mime, image/jpeg -> content-image.php
-						// Can overlap with get_post_format() formats
-						$format = explode("/", get_post_mime_type(), 2)[0];
-						// Don't want prepend_attachment on single pages, this mimics template-loader.php
-						remove_filter('the_content', 'prepend_attachment');
-					}
-					
-					get_template_part( 'content', $format );
+						/*
+						* Include the Post-Format-specific template for the content.
+						* If you want to override this in a child theme, then include a file
+						* called content-___.php (where ___ is the Post Format name) and that will be used instead.
+						*/
+						$format = get_post_format();
+						if(is_page())   $format = 'page';
+						if(is_search()) $format = 'search';
 
-					// Display comments partial if appropriate
-					if ( ( is_single() || is_page() ) && ( comments_open() || get_comments_number() ) ) :
-						comments_template();
-					endif;
+						if(is_single() && is_attachment()) {
+							// Template based on the first portion of mime, image/jpeg -> content-image.php
+							// Tack on tail to avoid overlap with get_post_format() formats
+							$format = explode("/", get_post_mime_type(), 2)[0]."_attachment";
+							// Don't want prepend_attachment on single pages, this mimics template-loader.php
+							remove_filter('the_content', 'prepend_attachment');
+						}
 
-				} // have_posts()
+						get_template_part( 'content', $format );
 
-				// Previous/next page navigation.
-				if (is_single()) {
-					if(is_attachment() && $format == "image") {
-						the_post_navigation( array(
-							'prev_text' => _x( '<span class="meta-nav">Published in</span><span class="post-title">%title</span>', 'Parent post link', 'fifteentwenty' ),
-						) );
-					} else {
-						the_post_navigation( array(
-							'next_text' => '<span class="meta-nav" aria-hidden="true">' . __( 'Next', 'fifteentwenty' ) . '</span> ' .
-								'<span class="screen-reader-text">' . __( 'Next post:', 'fifteentwenty' ) . '</span> ' .
-								'<span class="post-title">%title</span>',
-							'prev_text' => '<span class="meta-nav" aria-hidden="true">' . __( 'Previous', 'fifteentwenty' ) . '</span> ' .
-								'<span class="screen-reader-text">' . __( 'Previous post:', 'fifteentwenty' ) . '</span> ' .
-								'<span class="post-title">%title</span>',
-						) );
-					}
-				} else {
-					the_posts_pagination( array(
-						'prev_text'          => __( 'Previous page', 'fifteentwenty' ),
-						'next_text'          => __( 'Next page', 'fifteentwenty' ),
-						'before_page_number' => '<span class="meta-nav screen-reader-text">' . __( 'Page', 'fifteentwenty' ) . ' </span>',
-					) );
-				}
+						// Display comments partial if appropriate
+						if ( ( is_single() || is_page() ) && ( comments_open() || get_comments_number() ) ) :
+							comments_template();
+						endif;
 
-		} else {
-			// If no content, include the "No posts found" template.
-			get_template_part( 'content', is_404() ? '404' : 'none' );
-		} // have_posts()
-		?>
+					} // have_posts()
 
-		</main><!-- .site-main -->
-	</div><!-- .content-area -->
+					// Previous/next page navigation.
+					get_template_part( 'navigation', $format );
+			} else {
+				// If no content, include the "No posts found" or 404 partial.
+				get_template_part( 'content', is_404() ? '404' : 'none' );
+			} // have_posts()
+			?>
 
+			</main><!-- .site-main -->
+		</div><!-- .content-area -->
 	</div><!-- .site-content -->
 
 	<footer id="colophon" class="site-footer" role="contentinfo">
